@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"numerical-methods/linalg"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -23,4 +24,26 @@ func ParseRow(line string, n int) (linalg.Vector, error) {
 	}
 
 	return row, nil
+}
+
+func ParseEpsilon(inputPath string) (float64, error) {
+	data, err := os.ReadFile(inputPath)
+	if err != nil {
+		return 0, fmt.Errorf("read input file: %w", err)
+	}
+
+	fields := strings.Fields(string(data))
+	if len(fields) != 1 {
+		return 0, fmt.Errorf("input file must contain exactly one epsilon value")
+	}
+
+	epsilon, err := strconv.ParseFloat(fields[0], 64)
+	if err != nil {
+		return 0, fmt.Errorf("parse epsilon: %w", err)
+	}
+	if epsilon <= 0 {
+		return 0, fmt.Errorf("epsilon must be positive")
+	}
+
+	return epsilon, nil
 }

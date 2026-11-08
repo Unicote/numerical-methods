@@ -9,6 +9,8 @@ import (
 	"numerical-methods/lab-1/task-3"
 	"numerical-methods/lab-1/task-4"
 	"numerical-methods/lab-1/task-5"
+	lab2task1 "numerical-methods/lab-2/task-1"
+	lab2task2 "numerical-methods/lab-2/task-2"
 	"os"
 	"path/filepath"
 )
@@ -16,24 +18,30 @@ import (
 type taskRunner func(string) error
 
 func findTask(lab, task int) (taskRunner, error) {
-	if lab != 1 {
-		return nil, fmt.Errorf("laboratory work %d is not implemented", lab)
+	switch lab {
+	case 1:
+		switch task {
+		case 1:
+			return task_1.Run, nil
+		case 2:
+			return task_2.Run, nil
+		case 3:
+			return task_3.Run, nil
+		case 4:
+			return task_4.Run, nil
+		case 5:
+			return task_5.Run, nil
+		}
+	case 2:
+		switch task {
+		case 1:
+			return lab2task1.Run, nil
+		case 2:
+			return lab2task2.Run, nil
+		}
 	}
 
-	switch task {
-	case 1:
-		return task_1.Run, nil
-	case 2:
-		return task_2.Run, nil
-	case 3:
-		return task_3.Run, nil
-	case 4:
-		return task_4.Run, nil
-	case 5:
-		return task_5.Run, nil
-	default:
-		return nil, fmt.Errorf("task %d of laboratory work %d is not implemented", task, lab)
-	}
+	return nil, fmt.Errorf("task %d of laboratory work %d is not implemented", task, lab)
 }
 
 func main() {
@@ -43,7 +51,7 @@ func main() {
 	flag.Parse()
 
 	if *lab <= 0 || *task <= 0 {
-		_, err := fmt.Fprintln(os.Stderr, "Usage: go run . -lab 1 -task 1")
+		_, err := fmt.Fprintln(os.Stderr, "Usage: go run . -lab <number> -task <number>")
 		if err != nil {
 			return
 		}
