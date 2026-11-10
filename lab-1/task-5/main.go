@@ -5,8 +5,6 @@ import (
 	"math"
 	"numerical-methods/linalg"
 	"numerical-methods/utils"
-	"os"
-	"strings"
 )
 
 type Vector = linalg.Vector
@@ -208,17 +206,9 @@ func QREigenvalues(a Matrix, epsilon float64) ([]complex128, int, error) {
 }
 
 func Run(inputPath string) error {
-	data, err := os.ReadFile(inputPath)
+	lines, err := utils.ReadLines(inputPath)
 	if err != nil {
-		return fmt.Errorf("read input file: %w", err)
-	}
-
-	lines := make([]string, 0)
-	for _, line := range strings.Split(string(data), "\n") {
-		line = strings.TrimSpace(line)
-		if line != "" {
-			lines = append(lines, line)
-		}
+		return err
 	}
 
 	if len(lines) == 0 {
